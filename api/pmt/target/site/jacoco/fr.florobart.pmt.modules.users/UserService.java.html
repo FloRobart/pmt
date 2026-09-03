@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">fr.florobart.pmt.modules.users</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package fr.florobart.pmt.modules.users;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private final UserRepository repository;
+
+<span class="fc" id="L12">    public UserService(UserRepository userRepository) {</span>
+<span class="fc" id="L13">        this.repository = userRepository;</span>
+<span class="fc" id="L14">    }</span>
+
+    public List&lt;User&gt; getAll() {
+<span class="nc" id="L17">        return repository.findAll();</span>
+    }
+
+    public User getById(Long id) {
+<span class="nc" id="L21">        return repository.findById(id)</span>
+<span class="nc" id="L22">                .orElseThrow(() -&gt; new RuntimeException(&quot;User introuvable avec l'ID : &quot; + id));</span>
+    }
+
+    public User getByEmail(String email) {
+<span class="nc" id="L26">        return repository.findByEmail(email);</span>
+    }
+
+    public User create(User user) {
+<span class="nc" id="L30">        user.setId(null);</span>
+<span class="nc" id="L31">        return repository.save(user);</span>
+    }
+
+    public User login(UserLoginRequest userLoginRequest) {
+<span class="nc" id="L35">        User user = repository.findByEmailAndPassword(userLoginRequest.getEmail(), userLoginRequest.getPassword());</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L37">            throw new RuntimeException(&quot;Email ou mot de passe incorrect&quot;);</span>
+        }
+<span class="nc" id="L39">        return user;</span>
+    }
+
+    public User update(Long id, User userDetails) {
+<span class="nc" id="L43">        User user = getById(id);</span>
+<span class="nc" id="L44">        user.setUsername(userDetails.getUsername());</span>
+<span class="nc" id="L45">        return repository.save(user);</span>
+    }
+
+    public void delete(Long id) {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (!repository.existsById(id)) {</span>
+<span class="nc" id="L50">            throw new RuntimeException(&quot;User introuvable avec l'ID : &quot; + id);</span>
+        }
+<span class="nc" id="L52">        repository.deleteById(id);</span>
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

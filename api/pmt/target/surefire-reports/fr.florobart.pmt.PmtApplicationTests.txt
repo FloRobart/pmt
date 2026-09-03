@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: fr.florobart.pmt.PmtApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 40.05 s -- in fr.florobart.pmt.PmtApplicationTests

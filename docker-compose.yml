@@ -1,0 +1,78 @@
+services:
+  pmt-db:
+    image: ghcr.io/florobart/etude-de-cas-pmt-db:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - pmt-db-net
+    expose:
+      - 5432
+    volumes:
+      - pmt_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+  pmt-api:
+    image: ghcr.io/florobart/etude-de-cas-pmt-api:latest
+    working_dir: /app
+    restart: always
+    env_file: .env
+    environment:
+      SERVER_PORT: 80
+    depends_on:
+      pmt-db:
+        condition: service_healthy
+    networks:
+      - pmt-db-net
+      - pmt-net
+    ports:
+      - ${API_PORT:-}:80
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    user: "1800:1800"
+    tmpfs:
+      - /tmp:exec,nosuid,nodev
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://pmt-api:80/healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pmt-app:
+    image: ghcr.io/florobart/etude-de-cas-pmt-interface:latest
+    restart: always
+    depends_on:
+      pmt-api:
+        condition: service_healthy
+    networks:
+      - pmt-net
+    ports:
+      - ${INTERFACE_PORT:-4200}:80
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    
+
+volumes:
+  pmt_data:
+
+networks:
+  pmt-db-net:
+    driver: bridge
+  pmt-net:
+    driver: bridge

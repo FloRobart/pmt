@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">fr.florobart.pmt.modules.tasks</a> &gt; <span class="el_source">TaskController.java</span></div><h1>TaskController.java</h1><pre class="source lang-java linenums">package fr.florobart.pmt.modules.tasks;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(&quot;/tasks&quot;)
+public class TaskController {
+
+    private final TaskService service;
+
+    /**
+     * Constructor for ClientController
+     * @param taskService The service injected by Spring
+     */
+<span class="fc" id="L26">    public TaskController(TaskService service) {</span>
+<span class="fc" id="L27">        this.service = service;</span>
+<span class="fc" id="L28">    }</span>
+
+    @GetMapping(&quot;/projects/{id}&quot;)
+    public List&lt;Task&gt; getByProjectId(@PathVariable(&quot;id&quot;) Long projectId) {
+<span class="nc" id="L32">        return service.getByProjectId(projectId);</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Task&gt; getById(@PathVariable Long id) {
+<span class="nc" id="L37">        return ResponseEntity.ok(service.getById(id));</span>
+    }
+
+    @GetMapping(&quot;/projects/{projectId}/status/{status}&quot;)
+    public List&lt;Task&gt; getByProjectIdAndStatus(
+            @PathVariable Long projectId, @PathVariable TaskStatus status) {
+<span class="nc" id="L43">        return service.getByProjectIdAndStatus(projectId, status);</span>
+    }
+
+    @PostMapping(&quot;/projects/{id}&quot;)
+    public ResponseEntity&lt;Task&gt; create(@PathVariable Long id, @RequestBody Task task) {
+<span class="nc" id="L48">        Task createdTask = service.create(id, task);</span>
+<span class="nc" id="L49">        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Task&gt; update(@PathVariable Long id, @RequestBody Task task) {
+<span class="nc" id="L54">        Task updatedTask = service.update(id, task);</span>
+<span class="nc" id="L55">        return ResponseEntity.ok(updatedTask);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id, @RequestBody Task task) {
+<span class="nc" id="L60">        service.delete(id);</span>
+<span class="nc" id="L61">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

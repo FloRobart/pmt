@@ -1,0 +1,55 @@
+name: Run tests on Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-api:
+    name: Run API tests (Spring Boot / Java 25)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Spring Boot tests
+        run: |
+          cd api/pmt
+          chmod +x ./mvnw
+          ./mvnw test
+
+  # test-interface:
+  #   name: Run Frontend tests (Angular)
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '24'
+  #         cache: 'npm'
+  #         cache-dependency-path: interface/pmt-app/package-lock.json
+
+  #     - name: Install dependencies
+  #       run: |
+  #         cd interface/pmt-app
+  #         npm ci
+  #         npx playwright install
+
+  #     - name: Run Angular tests
+  #       run: |
+  #         cd interface/pmt-app
+  #         npm test -- --watch=false --browsers=ChromeHeadless
