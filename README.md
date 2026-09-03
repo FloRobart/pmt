@@ -13,7 +13,6 @@ Github repository : [https://github.com/FloRobart/pmt](https://github.com/FloRob
     - [Launching the application](#launching-the-application)
         - [In production](#in-production)
         - [For the developpement](#for-the-developpement)
-    - [Insert test data](#insert-test-data)
     - [Stop the application](#stop-the-application)
 
 ## Description
