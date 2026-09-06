@@ -15,6 +15,8 @@ Github repository : [https://github.com/FloRobart/pmt](https://github.com/FloRob
         - [For the developpement](#for-the-developpement)
     - [Stop the application](#stop-the-application)
 
+<div class="page"></div>
+
 ## Description
 
 **PMT** est une plateforme de gestion de projet collaboratif destinée aux équipes de

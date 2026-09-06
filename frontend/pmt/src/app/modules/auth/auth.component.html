@@ -1,0 +1,36 @@
+@if (!loggedInUser) {
+  <div class="card">
+    <h2>{{ isLoginMode ? 'Connexion' : 'Inscription' }}</h2>
+    <form (ngSubmit)="onSubmit()" #authForm="ngForm">
+
+      @if (!isLoginMode) {
+        <div class="form-group">
+          <label>Nom d'utilisateur</label>
+          <input type="text" name="username" [(ngModel)]="user.username" required>
+        </div>
+      }
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="user.email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" name="password" [(ngModel)]="user.password" required>
+      </div>
+
+      <button type="submit" [disabled]="!authForm.valid">
+        {{ isLoginMode ? 'Se connecter' : "S'inscrire" }}
+      </button>
+    </form>
+
+    <p class="toggle-text" (click)="toggleMode()">
+      {{ isLoginMode ? "Pas encore de compte ? S'inscrire" : 'Déjà un compte ? Se connecter' }}
+    </p>
+  </div>
+} @else {
+  <div class="success-message">
+    Bienvenue {{ loggedInUser.username }} ! Tu peux maintenant accéder à l'espace projet.
+  </div>
+}

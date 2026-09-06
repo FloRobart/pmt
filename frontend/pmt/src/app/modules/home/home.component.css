@@ -1,0 +1,25 @@
+.home-container {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 50px;
+}
+
+.home-container h1 {
+    color: #5b3fd6;
+    margin-bottom: 10px;
+}
+
+.actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background-color: #7f8c8d;
+}
+
+.btn-secondary:hover {
+    background-color: #636e72;
+}

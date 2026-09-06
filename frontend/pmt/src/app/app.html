@@ -1,0 +1,13 @@
+<nav class="navbar">
+  <div class="brand" routerLink="/">🚀 PMT</div>
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active">Accueil</a>
+    <a routerLink="/auth" routerLinkActive="active">Authentification</a>
+    <a routerLink="/workspace" routerLinkActive="active">Mon Espace</a>
+  </div>
+</nav>
+
+<!-- C'est ici que les composants (Home, Auth, Workspace) vont s'afficher selon l'URL -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

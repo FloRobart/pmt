@@ -1,0 +1,104 @@
+<div class="workspace-container">
+
+  <!-- Création de projet -->
+  @if (!currentProject) {
+    <div class="card">
+      <h2>Nouveau Projet</h2>
+      <form (ngSubmit)="createProject()" #projectForm="ngForm">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" name="name" [(ngModel)]="project.name" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="desc" [(ngModel)]="project.description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Date de début</label>
+          <input type="date" name="startDate" [(ngModel)]="project.startDate" required>
+        </div>
+        <button type="submit" [disabled]="!projectForm.valid">Créer le projet</button>
+      </form>
+    </div>
+  } @else {
+    <!-- Tableau de bord des tâches -->
+    <div>
+      <h2>Projet : {{ currentProject.name }}</h2>
+      <p>{{ currentProject.description }}</p>
+      <hr>
+
+      <div class="card">
+        <h3>Membres du projet</h3>
+        <form (ngSubmit)="inviteMember()">
+          <input type="email" name="inviteEmail" placeholder="Email du membre" [(ngModel)]="inviteEmail" required>
+          <select name="inviteRole" [(ngModel)]="inviteRole">
+            <option value="MEMBRE">Membre</option>
+            <option value="OBSERVATEUR">Observateur</option>
+            <option value="ADMINISTRATEUR">Administrateur</option>
+          </select>
+          <button type="submit">Inviter</button>
+        </form>
+        @for (member of members; track member.id.userId) {
+          <p>Utilisateur #{{ member.id.userId }} - {{ member.role }}</p>
+        }
+      </div>
+
+      <div class="task-dashboard">
+        <!-- Formulaire de tâche -->
+        <div class="card">
+          <h3>Nouvelle Tâche</h3>
+          <form (ngSubmit)="createTask()" #taskForm="ngForm">
+            <input type="text" placeholder="Nom de la tâche" name="tName" [(ngModel)]="newTask.name" required>
+            <input type="text" placeholder="Description" name="tDesc" [(ngModel)]="newTask.description" required>
+            <input type="date" name="tDue" [(ngModel)]="newTask.dueDate" required>
+            <select name="tPriority" [(ngModel)]="newTask.priority">
+              <option [ngValue]="1">Priorité basse</option>
+              <option [ngValue]="2">Priorité moyenne</option>
+              <option [ngValue]="3">Priorité haute</option>
+            </select>
+            <input type="email" placeholder="Assigné à (email)" name="tAssign" [(ngModel)]="newTask.assignedTo">
+            <button type="submit" [disabled]="!taskForm.valid">Ajouter la tâche</button>
+          </form>
+        </div>
+
+        <!-- Liste des tâches -->
+        <div class="task-list">
+          <h3>Tâches en cours</h3>
+          <!-- Utilisation obligatoire de "track" avec @for pour les performances -->
+          @for (t of tasks; track t.id || $index) {
+            @if (!t.endDate) {
+              <div class="task-item">
+                <strong>{{ t.name }}</strong> (Échéance: {{ t.dueDate | date }})
+                <p>{{ t.description }}</p>
+                <small>Assigné à : {{ t.assignedTo || 'Non assigné' }}</small>
+                <button type="button" (click)="showHistory(t)">Historique</button>
+                <button (click)="markAsDone(t)">Terminer</button>
+              </div>
+            }
+          } @empty {
+            <p>Aucune tâche dans ce projet pour le moment.</p>
+          }
+
+          @if (history.length) {
+            <div class="card">
+              <h3>Historique</h3>
+              @for (entry of history; track entry.id || $index) {
+                <p>{{ entry.name }} - {{ entry.status }} - priorité {{ entry.priority }}</p>
+              }
+            </div>
+          }
+
+          <h3>Tâches terminées</h3>
+          @for (t of tasks; track t.id || $index) {
+            @if (t.endDate) {
+              <div class="task-item done">
+                <strong>{{ t.name }}</strong>
+                <p>Terminée le : {{ t.endDate | date }}</p>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
