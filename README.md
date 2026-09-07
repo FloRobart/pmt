@@ -14,6 +14,9 @@ Github repository : [https://github.com/FloRobart/pmt](https://github.com/FloRob
         - [In production](#in-production)
         - [For the developpement](#for-the-developpement)
     - [Stop the application](#stop-the-application)
+    - [Coverage](#coverage)
+        - [API](#api)
+        - [Frontend](#frontend)
 
 <div class="page"></div>
 
@@ -116,3 +119,13 @@ r_users_projects (id_user, id_project, role)
     ```sh
     ./stop.sh
     ```
+
+## Coverage
+
+### API
+
+![Coverage API](./coverages/coverage_api.png)
+
+### Frontend
+
+![Coverage Frontend](./coverages/coverage_frontend.png)
