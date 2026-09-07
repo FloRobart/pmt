@@ -1,6 +1,6 @@
 services:
   pmt-db:
-    image: ghcr.io/florobart/etude-de-cas-pmt-db:latest
+    image: ghcr.io/florobart/pmt-db:latest
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -19,7 +19,7 @@ services:
       retries: 5
 
   pmt-api:
-    image: ghcr.io/florobart/etude-de-cas-pmt-api:latest
+    image: ghcr.io/florobart/pmt-api:latest
     working_dir: /app
     restart: always
     env_file: .env
@@ -49,8 +49,8 @@ services:
       timeout: 5s
       retries: 5
 
-  pmt-app:
-    image: ghcr.io/florobart/etude-de-cas-pmt-interface:latest
+  pmt-frontend:
+    image: ghcr.io/florobart/pmt-frontend:latest
     restart: always
     depends_on:
       pmt-api:

@@ -64,4 +64,50 @@ describe('AuthComponent', () => {
     expect(api.register).toHaveBeenCalledWith(component.user);
     expect(component.isLoginMode).toBe(true);
   });
+
+  it('devrait afficher le formulaire de connexion', () => {
+    const fixture = TestBed.createComponent(AuthComponent);
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('h2').textContent).toContain('Connexion');
+    expect(fixture.nativeElement.querySelector('input[name="email"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('input[name="username"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('button').textContent).toContain('Se connecter');
+  });
+
+  it('devrait afficher le formulaire d inscription', () => {
+    const fixture = TestBed.createComponent(AuthComponent);
+    fixture.componentInstance.isLoginMode = false;
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('h2').textContent).toContain('Inscription');
+    expect(fixture.nativeElement.querySelector('input[name="username"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('button').textContent).toContain("S'inscrire");
+  });
+
+  it('devrait afficher le message de bienvenue après connexion', () => {
+    const fixture = TestBed.createComponent(AuthComponent);
+    fixture.componentInstance.loggedInUser = { id: 7, username: 'User', email: 'user@example.com' };
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.success-message').textContent)
+      .toContain('Bienvenue User');
+    expect(fixture.nativeElement.querySelector('form')).toBeNull();
+  });
+
+  it('devrait conserver le mode connexion si la réponse ne contient pas d identifiant', () => {
+    const component = TestBed.createComponent(AuthComponent).componentInstance;
+    const router = TestBed.inject(Router);
+    const navigateSpy = vi.spyOn(router, 'navigate');
+    api.login.mockReturnValue(of({ email: 'user@example.com', username: 'User' }));
+
+    component.onSubmit();
+
+    expect(component.loggedInUser?.email).toBe('user@example.com');
+    expect(localStorage.getItem('userId')).toBeNull();
+    expect(navigateSpy).not.toHaveBeenCalled();
+  });
 });
